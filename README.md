@@ -34,7 +34,7 @@ fn test_generate_public_key() {
 
 ```rust
 #[test]
-fn key_to_hex() {
+fn bech32_key_to_hex() {
     let key = GeneratePrivateKey::new();
     let pubkey = GeneratePublicKey::new(key.hex_private_key());
     let hex_pubkey = ConvertKey::to_hex(pubkey.bech32_public_key());
