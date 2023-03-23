@@ -9,5 +9,7 @@ edition = "2021"
 bech32 = "0.9.1"
 hex = "0.4.3"
 rand = "0.8.5"
+reqwest = { version = "0.11", features = ["json", "rustls-tls"], default-features=false }
 secp256k1 = "0.27.0"
-tokio = "1.26.0"
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.26.0", features = ["full"] }

@@ -39,3 +39,12 @@ fn hex_key_to_bech32_private_key() {
     let bech32_privkey = ConvertKey::to_bech32_private_key(key.hex_private_key());
     assert_eq!(bech32_privkey, key.bech32_private_key());
 }
+
+#[tokio::test]
+async fn nip05_query() {
+    let domain = "noderunner.wtf";
+    let nip05 = rusted_nostr_tools::Nip05Query::new(domain).await;
+    assert_eq!(nip05.is_ok(), true);
+    let nip05_2 = rusted_nostr_tools::Nip05Query::new(domain).await.unwrap();
+    assert!(nip05_2.query().names.contains_key("nitesh"));
+}
