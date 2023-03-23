@@ -3,7 +3,6 @@ use bech32::{ToBase32, Variant};
 pub enum Prefix {
     Npub,
     Nsec,
-    Note,
 }
 
 // Display 'trait' needed for enum "to_string()"
@@ -12,7 +11,6 @@ impl std::fmt::Display for Prefix {
         match self {
             Prefix::Npub => write!(f, "npub"),
             Prefix::Nsec => write!(f, "nsec"),
-            Prefix::Note => write!(f, "note"),
         }
     }
 }
