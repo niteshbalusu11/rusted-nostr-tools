@@ -2,6 +2,12 @@
 
 Client Tools for Working with Nostr in Rust.
 
+## Installation
+
+```
+cargo add rusted-nostr-tools
+```
+
 ### Import 
 ```rust
 use chrono::Utc;
