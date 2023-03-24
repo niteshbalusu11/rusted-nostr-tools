@@ -76,14 +76,13 @@ fn signature() {
     assert_eq!(is_valid, true);
 
     let serialized_event = serialize_event(&event);
-    assert_eq!(serialized_event.is_ok(), false);
+    assert!(serialized_event.is_ok());
 
     let hash = get_event_hash(&event);
     assert!(&hash.is_ok());
 
     let signature = sign_event(&event, key.hex_private_key());
     assert!(&signature.is_ok());
-
-    let is_verified = verify_signature(&signature.unwrap(), pubkey, &hash.unwrap());
+    let is_verified = verify_signature(&signature.unwrap().sig, pubkey, &hash.unwrap());
     assert_eq!(is_verified.is_ok(), true);
 }

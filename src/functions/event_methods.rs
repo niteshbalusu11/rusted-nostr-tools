@@ -8,19 +8,30 @@ use sha2::{Digest, Sha256};
 
 #[derive(Debug, Serialize)]
 pub struct UnsignedEvent {
-    pub pubkey: String,
+    pub content: String,
     pub created_at: i64,
     pub kind: u64,
+    pub pubkey: String,
     pub tags: Vec<String>,
+}
+
+pub struct SignedEvent {
     pub content: String,
+    pub created_at: i64,
+    pub id: String,
+    pub kind: u64,
+    pub pubkey: String,
+    pub sig: String,
+    pub tags: Vec<String>,
 }
 
 pub fn get_event_hash(event: &UnsignedEvent) -> Result<String, String> {
     let commitment_string = serialize_event(&event)?;
 
-    println!("Commitment string: {:?}", &event);
     let mut hasher = Sha256::new();
+
     hasher.update(commitment_string.as_bytes());
+
     let hash = hasher.finalize();
     Ok(hex::encode(hash))
 }
@@ -40,7 +51,7 @@ pub fn serialize_event(evt: &UnsignedEvent) -> Result<String, String> {
     .to_string())
 }
 
-pub fn sign_event(event: &UnsignedEvent, key: &str) -> Result<String, Error> {
+pub fn sign_event(event: &UnsignedEvent, key: &str) -> Result<SignedEvent, Error> {
     let secp = Secp256k1::new();
     let secret_key =
         SecretKey::from_slice(&hex::decode(key).expect("FailedToDecodeHexPrivateKey"))?;
@@ -50,9 +61,19 @@ pub fn sign_event(event: &UnsignedEvent, key: &str) -> Result<String, Error> {
     let message = Message::from_slice(
         Sha256::digest(&serialize_event(event).unwrap().as_bytes()).as_slice(),
     )?;
-    let sig = secp.sign_schnorr_no_aux_rand(&message, &pair);
+    let sig = hex::encode(secp.sign_schnorr_no_aux_rand(&message, &pair).as_ref());
 
-    Ok(hex::encode(sig.as_ref()))
+    let id = get_event_hash(event).unwrap();
+
+    Ok(SignedEvent {
+        content: event.content.clone(),
+        created_at: event.created_at,
+        id,
+        kind: event.kind,
+        pubkey: event.pubkey.clone(),
+        sig,
+        tags: event.tags.clone(),
+    })
 }
 
 pub fn validate_event(event: &UnsignedEvent) -> bool {
