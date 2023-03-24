@@ -83,6 +83,7 @@ fn signature() {
 
     let signature = sign_event(&event, key.hex_private_key());
     assert!(&signature.is_ok());
+
     let is_verified = verify_signature(&signature.unwrap().sig, pubkey, &hash.unwrap());
     assert_eq!(is_verified.is_ok(), true);
 }

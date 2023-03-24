@@ -2,6 +2,7 @@
 name = "rusted-nostr-tools"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -14,5 +15,5 @@ reqwest = { version = "0.11", features = ["json", "rustls-tls"], default-feature
 secp256k1 = "0.27.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.94"
-tokio = { version = "1.26.0", features = ["full"] }
+tokio = { version = "1.26.0", features = ["rt-multi-thread", "macros"] }
 chrono = "0.4.24"
