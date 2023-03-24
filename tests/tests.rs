@@ -28,8 +28,10 @@ fn bech32_key_to_hex() {
     let pubkey = GeneratePublicKey::new(key.hex_private_key());
     let hex_pubkey = ConvertKey::to_hex(pubkey.bech32_public_key());
     let hex_privkey = ConvertKey::to_hex(key.bech32_private_key());
-    assert_eq!(hex_pubkey, pubkey.hex_public_key());
-    assert_eq!(hex_privkey, key.hex_private_key());
+    assert!(hex_pubkey.is_ok());
+    assert!(hex_privkey.is_ok());
+    assert_eq!(hex_pubkey.unwrap(), pubkey.hex_public_key());
+    assert_eq!(hex_privkey.unwrap(), key.hex_private_key());
 }
 
 #[test]
