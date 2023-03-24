@@ -4,7 +4,15 @@ Client Tools for Working with Nostr in Rust.
 
 ### Import 
 ```rust
-use rusted_nostr_tools::{ConvertKey, GeneratePrivateKey, GeneratePublicKey, Nip05Query};
+use chrono::Utc;
+use rusted_nostr_tools::{
+    event_methods::{
+        get_event_hash, serialize_event, sign_event, validate_event, verify_signature,
+        UnsignedEvent,
+    },
+    ConvertKey, GeneratePrivateKey, GeneratePublicKey, Nip05Query,
+};
+
 ```
 
 ### Generate Private Key 
@@ -69,5 +77,42 @@ async fn test_nip05_query() {
     assert_eq!(nip05.is_ok(), true);
     let nip05_2 = Nip05Query::new(domain).await.unwrap();
     assert!(nip05_2.query().names.contains_key("nitesh"));
+}
+```
+
+
+### Validate, Serialize, Get Event Hash, Sign and Verify Event
+
+```rust
+#[test]
+fn signature() {
+    let key = GeneratePrivateKey::new();
+    let binding = GeneratePublicKey::new(key.hex_private_key());
+    let pubkey = binding.hex_public_key();
+
+    let content = "yo".to_string();
+
+    let event = UnsignedEvent {
+        pubkey: pubkey.to_string(),
+        created_at: Utc::now().timestamp() as u64,
+        kind: 0,
+        tags: vec![],
+        content,
+    };
+
+    let is_valid = validate_event(&event);
+    assert_eq!(is_valid, true);
+
+    let serialized_event = serialize_event(&event);
+    assert_eq!(serialized_event.is_ok(), false);
+
+    let hash = get_event_hash(&event);
+    assert!(&hash.is_ok());
+
+    let signature = sign_event(&event, key.hex_private_key());
+    assert!(&signature.is_ok());
+
+    let is_verified = verify_signature(&signature.unwrap(), pubkey, &hash.unwrap());
+    assert_eq!(is_verified.is_ok(), true);
 }
 ```
