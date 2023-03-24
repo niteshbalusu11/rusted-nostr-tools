@@ -12,7 +12,7 @@ pub struct UnsignedEvent {
     pub created_at: i64,
     pub kind: u64,
     pub pubkey: String,
-    pub tags: Vec<String>,
+    pub tags: Vec<Vec<String>>,
 }
 
 pub struct SignedEvent {
@@ -22,7 +22,7 @@ pub struct SignedEvent {
     pub kind: u64,
     pub pubkey: String,
     pub sig: String,
-    pub tags: Vec<String>,
+    pub tags: Vec<Vec<String>>,
 }
 
 pub fn get_event_hash(event: &UnsignedEvent) -> Result<String, String> {
@@ -91,13 +91,7 @@ pub fn validate_event(event: &UnsignedEvent) -> bool {
     {
         return false;
     }
-    if !event
-        .tags
-        .iter()
-        .all(|tag| tag.chars().all(|inner| inner.is_alphanumeric()))
-    {
-        return false;
-    }
+
     true
 }
 
