@@ -9,7 +9,7 @@ use sha2::{Digest, Sha256};
 #[derive(Debug, Serialize)]
 pub struct UnsignedEvent {
     pub pubkey: String,
-    pub created_at: u64,
+    pub created_at: i64,
     pub kind: u64,
     pub tags: Vec<String>,
     pub content: String,

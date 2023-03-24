@@ -32,7 +32,7 @@ fn signature() {
 
     let event = UnsignedEvent {
         pubkey: pubkey.to_string(),
-        created_at: Utc::now().timestamp() as u64,
+        created_at: Utc::now().timestamp(),
         kind: 0,
         tags: vec![],
         content,
