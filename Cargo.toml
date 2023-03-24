@@ -1,8 +1,13 @@
 [package]
-name = "rusted-nostr-tools"
-version = "0.1.0"
+authors = ["Nitesh Balusu <niteshbalusu@icloud.com>"]
+description = "Rust library that provides tools for the Nostr clients."
 edition = "2021"
+homepage = "https://github.com/niteshbalusu11/rusted-nostr-tools"
+keywords = ["nostr", "nostr-tools", "nostr-client", "nostr-rs"]
 license = "MIT"
+name = "rusted-nostr-tools"
+readme = "README.md"
+version = "0.1.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
