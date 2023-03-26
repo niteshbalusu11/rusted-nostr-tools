@@ -1,16 +1,19 @@
-use crate::event_methods::SignedEvent as Event;
-use crate::utils::req::{Req, ReqFilter};
-use crate::utils::websocket::{self, SimplifiedWS};
+use super::event_methods::SignedEvent;
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::sync::Arc;
 use thiserror::Error;
 use tungstenite::Message;
 
+use crate::websocket::{
+    req::{Req, ReqFilter},
+    ws::{SimplifiedWS, SimplifiedWSError},
+};
+
 #[derive(Error, Debug)]
 pub enum ClientError {
     #[error("Error while trying to connect to the websocket server")]
-    WSError(websocket::SimplifiedWSError),
+    WSError(SimplifiedWSError),
 
     #[error("Already subscribed to the event")]
     AlreadySubscribed,
@@ -22,8 +25,8 @@ pub enum ClientError {
     SerdeError(#[from] serde_json::Error),
 }
 
-impl From<websocket::SimplifiedWSError> for ClientError {
-    fn from(err: websocket::SimplifiedWSError) -> Self {
+impl From<SimplifiedWSError> for ClientError {
+    fn from(err: SimplifiedWSError) -> Self {
         Self::WSError(err)
     }
 }
@@ -86,7 +89,7 @@ impl Client {
     }
 
     /// Publish a Nostr event
-    pub async fn publish_event(&mut self, event: &Event) -> Result<(), ClientError> {
+    pub async fn publish_event(&mut self, event: &SignedEvent) -> Result<(), ClientError> {
         let json_stringified = json!(["EVENT", event]).to_string();
         let message = Message::text(json_stringified);
 
@@ -324,8 +327,8 @@ impl Client {
     pub async fn get_events_of(
         &mut self,
         filters: Vec<ReqFilter>,
-    ) -> Result<Vec<Event>, ClientError> {
-        let mut events: Vec<Event> = Vec::new();
+    ) -> Result<Vec<SignedEvent>, ClientError> {
+        let mut events: Vec<SignedEvent> = Vec::new();
 
         // Subscribe
         let id = self.subscribe(filters).await?;
@@ -368,7 +371,7 @@ impl Client {
 
                 let event: Value = serde_json::from_str(&message.to_string())?;
 
-                let event_object = serde_json::from_value::<Event>(event[2].clone());
+                let event_object = serde_json::from_value::<SignedEvent>(event[2].clone());
 
                 if event_object.is_err() {
                     continue;

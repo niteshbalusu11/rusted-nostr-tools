@@ -1,4 +1,4 @@
-use crate::utils::utils::random_hash;
+use crate::functions::utils::random_hash;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::fmt;
