@@ -22,3 +22,9 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.94"
 tokio = { version = "1.26.0", features = ["rt-multi-thread", "macros"] }
 chrono = "0.4.24"
+tungstenite = { version = "0.18", default-features = false, features = ["handshake", "rustls-tls-webpki-roots"] }
+tokio-tungstenite = { version = "0.18", default-features = true, features = ["handshake", "rustls-tls-webpki-roots"] }
+futures-util = "0.3"
+futures = "0.3"
+thiserror = "1.0.40"
+url = "2.3.1"

@@ -1,5 +1,5 @@
 mod functions;
-
+mod utils;
 pub use functions::convert_key::ConvertKey;
 pub use functions::event_methods;
 pub use functions::generate_private_key::GeneratePrivateKey;

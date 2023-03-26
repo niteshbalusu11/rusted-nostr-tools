@@ -2,7 +2,7 @@ use chrono::NaiveDateTime;
 use secp256k1::{
     schnorr::Signature, Error, KeyPair, Message, Secp256k1, SecretKey, XOnlyPublicKey,
 };
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sha2::{Digest, Sha256};
 
@@ -15,6 +15,7 @@ pub struct UnsignedEvent {
     pub tags: Vec<Vec<String>>,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
 pub struct SignedEvent {
     pub content: String,
     pub created_at: i64,
